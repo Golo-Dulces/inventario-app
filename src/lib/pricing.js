@@ -14,6 +14,15 @@ function roundToStep(value, step) {
   return Math.round((n + Number.EPSILON) / s) * s
 }
 
+function roundToStepMinPositive(value, step) {
+  const rounded = roundToStep(value, step)
+  const n = Number(value)
+  const s = Number(step)
+  if (rounded == null) return null
+  if (Number.isFinite(n) && n > 0 && rounded <= 0 && Number.isFinite(s) && s > 0) return s
+  return rounded
+}
+
 /**
  * calcPrecios
  * - redondeo: step para el redondeo de precios unitarios (antes de aplicar pack)
@@ -60,9 +69,9 @@ export function calcPrecios(item, redondeo = 1) {
   // ✅ Redondeo final a múltiplos de 50 (al más cercano)
   const stepFinal = 50
   const minorista =
-    minorista_unit != null ? roundToStep(minorista_unit * pack_unid, stepFinal) : null
+    minorista_unit != null ? roundToStepMinPositive(minorista_unit * pack_unid, stepFinal) : null
   const mayorista =
-    mayorista_unit != null ? roundToStep(mayorista_unit * pack_unid, stepFinal) : null
+    mayorista_unit != null ? roundToStepMinPositive(mayorista_unit * pack_unid, stepFinal) : null
 
   // 4) costo por 100g
   const esPorPeso = !!item.es_por_peso
@@ -98,7 +107,7 @@ export function calcPrecios(item, redondeo = 1) {
     m100 < 1
   ) {
     // misma lógica de margen: precio = costo / (1 - margen)
-    venta_100g = roundToStep(costo_100g / (1 - m100), stepFinal)
+    venta_100g = roundToStepMinPositive(costo_100g / (1 - m100), stepFinal)
   }
 
   return {

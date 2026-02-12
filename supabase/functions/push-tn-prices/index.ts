@@ -99,8 +99,10 @@ function resolveMargin(variantMargin: unknown, productMargin: unknown): number |
 function calcFinalPackPrice(unitPrice: number | null, pack: number, finalStep: number): number | null {
   if (unitPrice === null) return null;
   const pk = Number.isFinite(pack) && pack > 0 ? pack : 1;
-  const final = roundToStep(unitPrice * pk, finalStep);
+  const raw = unitPrice * pk;
+  const final = roundToStep(raw, finalStep);
   if (final === null) return null;
+  if (raw > 0 && final <= 0 && Number.isFinite(finalStep) && finalStep > 0) return finalStep;
   return Math.max(0, final);
 }
 
