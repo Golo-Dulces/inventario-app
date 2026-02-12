@@ -752,18 +752,36 @@ export default function ProductDetail({ user }) {
           </thead>
           <tbody>
             {variants.map(v => {
-              const pick = (a, b) => (a !== null && a !== undefined && a !== '' ? a : b)
+              const pickNonEmpty = (a, b) => (a !== null && a !== undefined && a !== '' ? a : b)
+              const pickPositive = (a, b) => {
+                const an = Number(a)
+                if (a !== null && a !== undefined && a !== '' && Number.isFinite(an) && an > 0) return an
+                const bn = Number(b)
+                if (b !== null && b !== undefined && b !== '' && Number.isFinite(bn) && bn > 0) return bn
+                return null
+              }
+              const pickMargin = (a, b) => {
+                const an = Number(a)
+                if (a !== null && a !== undefined && a !== '' && Number.isFinite(an) && an > 0 && an < 1) return an
+                const bn = Number(b)
+                if (b !== null && b !== undefined && b !== '' && Number.isFinite(bn) && bn > 0 && bn < 1) return bn
+                return null
+              }
+              const parentCostManual =
+                product?.es_compuesto && product?.costo_compuesto_cache != null
+                  ? product.costo_compuesto_cache
+                  : product?.costo_unitario_manual
               const calcItem = {
-                costo_unitario_manual: pick(v.costo_unitario_manual, product.costo_unitario_manual),
-                unid_por_bulto: pick(v.unid_por_bulto, product.unid_por_bulto),
-                precio_bulto: pick(v.precio_bulto, product.precio_bulto),
-                margen_minorista: pick(v.margen_minorista, product.margen_minorista),
-                margen_mayorista: pick(v.margen_mayorista, product.margen_mayorista),
+                costo_unitario_manual: pickPositive(v.costo_unitario_manual, parentCostManual),
+                unid_por_bulto: pickPositive(v.unid_por_bulto, product.unid_por_bulto),
+                precio_bulto: pickPositive(v.precio_bulto, product.precio_bulto),
+                margen_minorista: pickMargin(v.margen_minorista, product.margen_minorista),
+                margen_mayorista: pickMargin(v.margen_mayorista, product.margen_mayorista),
                 pack_mayorista_unid: product.pack_mayorista_unid,
-                es_por_peso: pick(v.es_por_peso, product.es_por_peso),
-                peso_por_unidad_g: pick(v.peso_por_unidad_g, product.peso_por_unidad_g),
-                price_100g: pick(v.price_100g, product.price_100g),
-                margin_100g: pick(v.margin_100g, product.margin_100g),
+                es_por_peso: pickNonEmpty(v.es_por_peso, product.es_por_peso),
+                peso_por_unidad_g: pickPositive(v.peso_por_unidad_g, product.peso_por_unidad_g),
+                price_100g: pickPositive(v.price_100g, product.price_100g),
+                margin_100g: pickMargin(v.margin_100g, product.margin_100g),
               }
               const pv = calcPrecios(calcItem, redondeo)
 

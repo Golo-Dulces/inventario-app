@@ -44,7 +44,7 @@ export function calcPrecios(item, redondeo = 1) {
   } else {
     const bulk = Number(item.precio_bulto)
     const unid = Number(item.unid_por_bulto)
-    if (Number.isFinite(bulk) && Number.isFinite(unid) && unid > 0) {
+    if (Number.isFinite(bulk) && bulk > 0 && Number.isFinite(unid) && unid > 0) {
       costo_unitario = bulk / unid
     }
   }

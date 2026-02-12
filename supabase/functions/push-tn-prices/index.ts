@@ -76,7 +76,15 @@ function calcCostUnit(p: { costo_unitario_manual?: unknown; unid_por_bulto?: unk
 
   const unid = toNumber(p.unid_por_bulto);
   const bulto = toNumber(p.precio_bulto);
-  if (unid !== null && unid > 0 && bulto !== null && bulto >= 0) return bulto / unid;
+  if (unid !== null && unid > 0 && bulto !== null && bulto > 0) return bulto / unid;
+  return null;
+}
+
+function resolvePositive(primary: unknown, fallback: unknown): number | null {
+  const p = toNumber(primary);
+  if (p !== null && p > 0) return p;
+  const f = toNumber(fallback);
+  if (f !== null && f > 0) return f;
   return null;
 }
 
@@ -296,18 +304,15 @@ serve(async (req) => {
         continue;
       }
 
-      const pick = <T>(a: T | null | undefined, b: T | null | undefined) =>
-        a !== null && a !== undefined && (typeof a !== "string" || a !== "") ? a : b;
-
       const parentCostManual =
         prod.es_compuesto && toNumber(prod.costo_compuesto_cache) !== null
           ? toNumber(prod.costo_compuesto_cache)
           : prod.costo_unitario_manual;
 
       const costUnit = calcCostUnit({
-        costo_unitario_manual: pick(v.costo_unitario_manual, parentCostManual),
-        unid_por_bulto: pick(v.unid_por_bulto, prod.unid_por_bulto),
-        precio_bulto: pick(v.precio_bulto, prod.precio_bulto),
+        costo_unitario_manual: resolvePositive(v.costo_unitario_manual, parentCostManual),
+        unid_por_bulto: resolvePositive(v.unid_por_bulto, prod.unid_por_bulto),
+        precio_bulto: resolvePositive(v.precio_bulto, prod.precio_bulto),
       });
       if (costUnit === null) {
         skippedNoPrice.push({ sku, local_variant_id: v.id, reason: "Sin costo unitario" });
