@@ -1,0 +1,5 @@
+[functions.sync-tn-stock]
+verify_jwt = false
+
+[functions.push-tn-prices]
+verify_jwt = false

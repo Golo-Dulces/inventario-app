@@ -1,0 +1,69 @@
+:root { font-family: system-ui, Arial, sans-serif; }
+body { margin: 0; background: #0b0c10; color: #e8e8e8; }
+a { color: inherit; text-decoration: none; }
+.container { max-width: 1100px; margin: 0 auto; padding: 16px; }
+.card { background: #14161d; border: 1px solid #232635; border-radius: 12px; padding: 12px; }
+.row { display: flex; gap: 12px; flex-wrap: wrap; }
+.app-topbar { border-radius: 0; border-left: 0; border-right: 0; }
+.app-topbar-inner { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.app-user { align-items: center; min-width: 0; }
+.app-user-email { display: inline-block; max-width: 320px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+input, select, button, textarea { border-radius: 10px; border: 1px solid #2a2f44; padding: 10px; background: #0f1118; color: #e8e8e8; }
+button { cursor: pointer; }
+button.primary { background: #ff7a18; border-color: #ff7a18; color: #120a00; font-weight: 700; }
+small.muted { color: #a7adbf; }
+.table { width: 100%; border-collapse: collapse; }
+.table td, .table th { border-bottom: 1px solid #262a3a; padding: 10px; text-align: left; }
+.table-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.pill { display:inline-block; padding:4px 10px; border-radius:999px; border:1px solid #2a2f44; }
+.products-mobile-list { display: none; }
+.product-mobile-card { padding: 10px; }
+.products-header { align-items: center; justify-content: space-between; }
+.products-actions { gap: 8px; }
+.products-filters { align-items: center; gap: 8px; }
+.product-mobile-name { line-height: 1.3; word-break: break-word; }
+.product-mobile-meta { line-height: 1.35; display: block; margin-top: 4px; }
+.product-mobile-status { line-height: 1.35; }
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 160px;
+}
+
+.field .label {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.field .help {
+  font-size: 12px;
+  opacity: 0.65;
+}
+
+.thTitle { display:block; font-size: 12px; }
+.thHelp  { display:block; font-size: 11px; opacity: 0.65; font-weight: 400; margin-top: 4px; }
+
+@media (max-width: 900px) {
+  .container { padding: 12px; }
+  .card { padding: 10px; border-radius: 10px; }
+  .row { gap: 8px; }
+  input, select, button, textarea { font-size: 14px; }
+  .table { min-width: 760px; }
+  .table td, .table th { padding: 8px; font-size: 13px; white-space: nowrap; }
+  .products-table-desktop { display: none; }
+  .products-mobile-list { display: grid; gap: 8px; }
+  .app-topbar-inner { align-items: flex-start; }
+  .app-user { width: 100%; justify-content: space-between; }
+  .app-user-email { max-width: 68vw; font-size: 12px; }
+  .products-header { align-items: flex-start; }
+  .products-actions { width: 100%; }
+  .products-filters { display: grid; grid-template-columns: 1fr 1fr; }
+  .products-filters input { grid-column: 1 / -1; min-width: 0; width: 100%; }
+  .products-filters select, .products-filters button { width: 100%; }
+  .product-mobile-card { padding: 12px; }
+  .product-mobile-head { align-items: flex-start; gap: 8px; }
+  .product-mobile-prices { gap: 6px; }
+  .product-mobile-prices .pill { font-size: 12px; padding: 4px 8px; }
+}
+
